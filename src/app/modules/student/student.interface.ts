@@ -1,4 +1,4 @@
-
+import { Schema, model, connect } from 'mongoose';
 
 export type Guardian = {
   fatherName: string;
@@ -34,5 +34,5 @@ export type Student = {
   guardian: Guardian;
   localGuardian: LocalGuardian;
   profileImg?: string;
-  isActive: 'active' | 'inActive';
+  isActive: 'active' | 'blocked';
 };
