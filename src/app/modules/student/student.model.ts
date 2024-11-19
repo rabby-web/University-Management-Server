@@ -1,4 +1,5 @@
 import { Schema, model } from 'mongoose';
+import validator from 'validator';
 import {
   Guardian,
   LocalGuardian,
@@ -30,6 +31,10 @@ const userNameSchema = new Schema<UserName>({
     trim: true,
     required: [true, 'Last Name is required'],
     maxlength: [20, 'Name can not be more than 20 characters'],
+    validate: {
+      validator: (value: string) => validator.isAlpha(value),
+      message: '{VALUE} is not valid',
+    },
   },
 });
 
@@ -104,6 +109,10 @@ const studentSchema = new Schema<Student>({
     type: String,
     required: [true, 'Email is required'],
     unique: true,
+    validate: {
+      validator: (value: string) => validator.isEmail(value),
+      message: '{VALUE} is not valid email type',
+    },
   },
   contactNo: { type: String, required: [true, 'Contact number is required'] },
   emergencyContactNo: {
@@ -146,3 +155,57 @@ const studentSchema = new Schema<Student>({
 
 // create model
 export const StudentModel = model<Student>('Student', studentSchema);
+
+// // for mongoose validation======>>>>
+// firstName: {
+//   // Specifies that firstName should be a string
+//   type: String,
+
+//   // Makes firstName a required field, with a custom error message if it's missing
+//   required: [true, 'First Name is required'],
+
+//   // Automatically removes any leading or trailing whitespace from the input
+//   trim: true,
+
+//   // Limits firstName to a maximum of 20 characters, with an error message if exceeded
+//   maxlength: [20, 'Name can not be more than 20 characters'],
+
+//   // Custom validation to ensure the first letter of firstName is capitalized
+//   validate: {
+//     // Validator function checks if the first character is uppercase
+//     validator: function (value: string) {
+//       // Creates a version of firstName with the first letter capitalized
+//       const firstName = value.charAt(0).toUpperCase() + value.slice(1);
+
+//       // Checks if the original value is the same as the capitalized version
+//       return firstName === value;
+//     },
+//     // Custom error message if validation fails, showing the entered value
+//     message: '{VALUE} is not in capitalize format',
+//   },
+// },
+
+
+// // for validatior======>>>>
+// lastName: {
+//   // Specifies that lastName should be a string
+//   type: String,
+
+//   // Automatically removes any leading or trailing whitespace from the input
+//   trim: true,
+
+//   // Makes lastName a required field, with a custom error message if it's missing
+//   required: [true, 'Last Name is required'],
+
+//   // Limits lastName to a maximum of 20 characters; an error message is shown if exceeded
+//   maxlength: [20, 'Name can not be more than 20 characters'],
+
+//   // Custom validation to ensure lastName contains only alphabetic characters
+//   validate: {
+//     // Uses an external validator function (validator.isAlpha) to check if value is alphabetic
+//     validator: (value: string) => validator.isAlpha(value),
+
+//     // Custom error message if validation fails, showing the entered value
+//     message: '{VALUE} is not valid',
+//   },
+// },
