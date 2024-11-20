@@ -100,7 +100,6 @@ const studentSchema = new Schema<TStudent, StudentModel>({
   password: {
     type: String,
     required: [true, 'Password is required'],
-    unique: true,
     maxlength: [20, 'Password can not more than 20 characters'],
   },
 
@@ -163,6 +162,10 @@ const studentSchema = new Schema<TStudent, StudentModel>({
     },
     default: 'active',
   },
+  isDeleted: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 // pre save middleware | hooks : will work on create() save()
@@ -177,8 +180,16 @@ studentSchema.pre('save', async function (next) {
   );
   next();
 });
-studentSchema.post('save', function () {
-  console.log(this, 'post hook : we save our data');
+
+studentSchema.post('save', function (doc, next) {
+  doc.password = '';
+
+  next();
+});
+
+// Query Middleware
+studentSchema.pre('find', function (next) {
+  console.log(this);
 });
 
 // create a custom instance method

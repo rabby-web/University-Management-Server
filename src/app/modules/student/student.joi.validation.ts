@@ -29,7 +29,7 @@ const localGuardianSchema = Joi.object({
 
 export const studentValidationSchema = Joi.object({
   id: Joi.string().required(),
-//   password: Joi.string().required().max(30),
+  //   password: Joi.string().required().max(30),
   name: userNameSchema.required(),
   gender: Joi.string().valid('male', 'female', 'other').required(),
   dateOfBirth: Joi.string(),
@@ -56,9 +56,9 @@ export const studentValidationSchema = Joi.object({
 
 export default studentValidationSchema;
 
-    // creating a schema validation using joi
+// creating a schema validation using joi
 
-    // Joi schema for userName
+// Joi schema for userName
 // const userNameValidationSchema = Joi.object({
 //   firstName: Joi.string()
 //     .trim()
