@@ -93,6 +93,12 @@ const localGuardianSchema = new Schema<TLocalGuardian>({
 // user student schema
 const studentSchema = new Schema<TStudent, StudentModel>({
   id: { type: String, required: [true, 'ID is required'], unique: true },
+  password: {
+    type: String,
+    required: [true, 'Password is required'],
+    unique: true,
+    maxlength: [20, 'Password can not more than 20 characters'],
+  },
 
   name: {
     type: userNameSchema,
@@ -153,6 +159,14 @@ const studentSchema = new Schema<TStudent, StudentModel>({
     },
     default: 'active',
   },
+});
+
+// pre save middleware | hooks : will work on create() save()
+studentSchema.pre('save', function () {
+  console.log(this, 'pre hook : we will save data');
+});
+studentSchema.post('save', function () {
+  console.log(this, 'post hook : we save our data');
 });
 
 // create a custom instance method
