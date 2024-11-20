@@ -189,7 +189,13 @@ studentSchema.post('save', function (doc, next) {
 
 // Query Middleware
 studentSchema.pre('find', function (next) {
-  console.log(this);
+  this.find({ isDeleted: { $ne: true } });
+  next();
+});
+
+studentSchema.pre('findOne', function (next) {
+  this.find({ isDeleted: { $ne: true } });
+  next();
 });
 
 // create a custom instance method
