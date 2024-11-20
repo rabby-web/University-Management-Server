@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Schema, model } from 'mongoose';
 // import validator from 'validator';
 import {
@@ -8,6 +10,8 @@ import {
   TStudent,
   StudentModel,
 } from './student.interface';
+import bcrypt from 'bcrypt';
+import config from '../../config';
 
 // user name schema
 const userNameSchema = new Schema<TUserName>({
@@ -162,8 +166,16 @@ const studentSchema = new Schema<TStudent, StudentModel>({
 });
 
 // pre save middleware | hooks : will work on create() save()
-studentSchema.pre('save', function () {
-  console.log(this, 'pre hook : we will save data');
+studentSchema.pre('save', async function (next) {
+  // console.log(this, 'pre hook : we will save data');
+  // hashing password and into DB
+  // eslint-disable-next-line @typescript-eslint/no-this-alias
+  const user = this;
+  user.password = await bcrypt.hash(
+    this.password,
+    Number(config.bcrypt_salt_rounds),
+  );
+  next();
 });
 studentSchema.post('save', function () {
   console.log(this, 'post hook : we save our data');
