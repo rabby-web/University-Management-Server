@@ -6,8 +6,6 @@ import {
   TStudent,
   StudentModel,
 } from './student.interface';
-import bcrypt from 'bcrypt';
-import config from '../../config';
 
 // user name schema
 const userNameSchema = new Schema<TUserName>({
@@ -15,14 +13,6 @@ const userNameSchema = new Schema<TUserName>({
     type: String,
     required: [true, 'First Name is required'],
     trim: true,
-    // maxlength: [20, 'Name can not be more than 20 characters'],
-    // validate: {
-    //   validator: function (value: string) {
-    //     const firstName = value.charAt(0).toUpperCase() + value.slice(1);
-    //     return firstName === value;
-    //   },
-    //   message: '{VALUE} is not in capitalize format',
-    // },
   },
   middleName: {
     type: String,
@@ -31,12 +21,6 @@ const userNameSchema = new Schema<TUserName>({
   lastName: {
     type: String,
     trim: true,
-    // required: [true, 'Last Name is required'],
-    // maxlength: [20, 'Name can not be more than 20 characters'],
-    // validate: {
-    //   validator: (value: string) => validator.isAlpha(value),
-    //   message: '{VALUE} is not valid',
-    // },
   },
 });
 
@@ -100,12 +84,7 @@ const studentSchema = new Schema<TStudent, StudentModel>(
       unique: true,
       ref: 'User',
     },
-    password: {
-      type: String,
-      required: [true, 'Password is required'],
-      maxlength: [20, 'Password can not more than 20 characters'],
-    },
-
+  
     name: {
       type: userNameSchema,
       required: [true, 'Name is required'],
@@ -123,10 +102,6 @@ const studentSchema = new Schema<TStudent, StudentModel>(
       type: String,
       required: [true, 'Email is required'],
       unique: true,
-      // validate: {
-      //   validator: (value: string) => validator.isEmail(value),
-      //   message: '{VALUE} is not valid email type',
-      // },
     },
     contactNo: { type: String, required: [true, 'Contact number is required'] },
     emergencyContactNo: {
@@ -175,24 +150,7 @@ studentSchema.virtual('fullName').get(function () {
   return `${this.name.firstName} ${this.name.middleName} ${this.name.lastName}`;
 });
 
-// pre save middleware | hooks : will work on create() save() ---
-studentSchema.pre('save', async function (next) {
-  // console.log(this, 'pre hook : we will save data');
-  // hashing password and into DB
-  // eslint-disable-next-line @typescript-eslint/no-this-alias
-  const user = this;
-  user.password = await bcrypt.hash(
-    this.password,
-    Number(config.bcrypt_salt_rounds),
-  );
-  next();
-});
 
-studentSchema.post('save', function (doc, next) {
-  doc.password = '';
-
-  next();
-});
 
 // Query Middleware
 studentSchema.pre('find', function (next) {
@@ -216,9 +174,4 @@ studentSchema.statics.isUserExists = async function (id: string) {
   return existingUser;
 };
 
-// create a custom instance method
-// studentSchema.methods.isUserExists = async function (id: string) {
-//   const existingUser = await Student.findOne({ id });
-//   return existingUser;
-// };
 export const Student = model<TStudent, StudentModel>('Student', studentSchema);
