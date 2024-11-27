@@ -1,10 +1,6 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Schema, model } from 'mongoose';
-// import validator from 'validator';
 import {
   TGuardian,
-  // StudentMethods,
   TUserName,
   TLocalGuardian,
   TStudent,
@@ -180,7 +176,7 @@ studentSchema.virtual('fullName').get(function () {
   return `${this.name.firstName} ${this.name.middleName} ${this.name.lastName}`;
 });
 
-// pre save middleware | hooks : will work on create() save()
+// pre save middleware | hooks : will work on create() save() ---
 studentSchema.pre('save', async function (next) {
   // console.log(this, 'pre hook : we will save data');
   // hashing password and into DB
