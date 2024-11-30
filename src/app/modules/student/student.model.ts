@@ -77,14 +77,13 @@ const localGuardianSchema = new Schema<TLocalGuardian>({
 // user student schema
 const studentSchema = new Schema<TStudent, StudentModel>(
   {
-    id: { type: String, required: [true, 'ID is required'], unique: true },
     user: {
       type: Schema.Types.ObjectId,
       required: [true, 'User ID is required'],
       unique: true,
       ref: 'User',
     },
-  
+
     name: {
       type: userNameSchema,
       required: [true, 'Name is required'],
@@ -132,11 +131,6 @@ const studentSchema = new Schema<TStudent, StudentModel>(
       required: [true, 'Local guardian information is required'],
     },
     profileImg: { type: String },
-   
-    isDeleted: {
-      type: Boolean,
-      default: false,
-    },
   },
   {
     toJSON: {
@@ -149,8 +143,6 @@ const studentSchema = new Schema<TStudent, StudentModel>(
 studentSchema.virtual('fullName').get(function () {
   return `${this.name.firstName} ${this.name.middleName} ${this.name.lastName}`;
 });
-
-
 
 // Query Middleware
 studentSchema.pre('find', function (next) {
