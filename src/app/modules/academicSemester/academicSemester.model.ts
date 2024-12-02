@@ -38,17 +38,17 @@ const academicSemesterSchema = new Schema<TAcademicSemester>(
   },
 );
 
-// academicSemesterSchema.pre('save', async function (next) {
-//   const isSemesterExists = await AcademicSemester.findOne({
-//     year: this.year,
-//     name: this.name,
-//   });
+academicSemesterSchema.pre('save', async function (next) {
+  const isSemesterExists = await AcademicSemester.findOne({
+    year: this.year,
+    name: this.name,
+  });
 
-//   if (isSemesterExists) {
-//     throw new Error('Semester is already exists !');
-//   }
-//   next();
-// });
+  if (isSemesterExists) {
+    throw new Error('Semester is already exists !');
+  }
+  next();
+});
 
 export const AcademicSemester = model<TAcademicSemester>(
   'AcademicSemester',
@@ -62,5 +62,5 @@ export const AcademicSemester = model<TAcademicSemester>(
 //2030 Fall => Created
 
 // Autumn 01
-// Summar 02
+// Summer 02
 // Fall 03
