@@ -17,5 +17,12 @@ router.get(
   '/:departmentId',
   AcademicDepartmentControllers.getSingleAcademicDepartment,
 );
+router.patch(
+  '/:departmentId',
+  validateRequest(
+    AcademicDepartmentValidation.updateAcademicDepartmentValidationSchema,
+  ),
+  AcademicDepartmentControllers.updateAcademicDepartment,
+);
 
 export const AcademicDepartmentRoutes = router;
