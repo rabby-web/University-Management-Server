@@ -15,7 +15,18 @@ const createAcademicFaculty = catchAsync(async (req, res) => {
     data: result,
   });
 });
+const getAllAcademicFaculties = catchAsync(async (req, res) => {
+    const result = await AcademicFacultyServices.getAllAcademicFacultiesFromDB();
+  
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'Academic faculties are retrieved successfully',
+      data: result,
+    });
+  });
 
 export const AcademicFacultyControllers = {
   createAcademicFaculty,
+  getAllAcademicFaculties
 };
