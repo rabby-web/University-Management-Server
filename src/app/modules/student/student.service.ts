@@ -6,8 +6,8 @@ import httpStatus from 'http-status';
 import { TStudent } from './student.interface';
 
 const getAllStudentsFromDB = async (query: Record<string, unknown>) => {
-  console.log('bas query', query);
   const queryObj = { ...query };
+
   // {email: {$regex: query.searchTerm, $option: i}}
   const studentSearchableFields = ['email', 'name.firstName', 'presentAddress'];
   let searchTerm = '';
@@ -22,9 +22,9 @@ const getAllStudentsFromDB = async (query: Record<string, unknown>) => {
   });
 
   // Filtering
-  const excludeFields = ['searchTerm', 'sort', 'limit'];
+  const excludeFields = ['searchTerm', 'sort', 'limit', 'page'];
   excludeFields.forEach((el) => delete queryObj[el]);
-  console.log(query, queryObj);
+  console.log({ query }, { queryObj });
 
   const filterQuery = searchQuery
     .find(queryObj)
@@ -42,11 +42,21 @@ const getAllStudentsFromDB = async (query: Record<string, unknown>) => {
   }
   const sortQuery = filterQuery.sort(sort);
 
+  let page = 1;
   let limit = 1;
+  let skip = 0;
+
   if (query.limit) {
-    limit = query.limit;
+    limit = Number(query.limit);
   }
-  const limitQuery = await sortQuery.limit(limit);
+  if (query.page) {
+    page = Number(query.page);
+    skip = (page - 1) * limit;
+  }
+
+  const paginateQuery = sortQuery.skip(skip);
+
+  const limitQuery = await paginateQuery.limit(limit);
 
   return limitQuery;
 };
