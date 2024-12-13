@@ -11,6 +11,7 @@ router.post(
   OfferedCourseControllers.createOfferedCourse,
 );
 router.get('/:id', OfferedCourseControllers.getSingleOfferedCourses);
+router.delete('/:id', OfferedCourseControllers.deleteOfferedCourseFromDB);
 
 router.get('/', OfferedCourseControllers.getAllOfferedCourses);
 
