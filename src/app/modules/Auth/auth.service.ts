@@ -1,4 +1,3 @@
-import { JwtPayload } from './../../../../node_modules/@types/jsonwebtoken/index.d';
 import httpStatus from 'http-status';
 import AppError from '../../errors/AppError';
 import { User } from '../user/user.model';
@@ -32,25 +31,18 @@ const loginUser = async (payload: TLoginUser) => {
 
   // create token and sent the client
 
-  const JwtPayload = {
-    userId: user,
+  const jwtPayload = {
+    userId: user.id,
     role: user.role,
   };
 
-  const accessToken = jwt.sign(
-    {
-      data: 'foobar',
-    },
-    config.jwt_access_secret as string,
-    {
-      expiresIn: '10d',
-    },
-  );
+  const accessToken = jwt.sign(jwtPayload, config.jwt_access_secret as string, {
+    expiresIn: '10d',
+  });
 
   return { accessToken, needsPasswordChange: user?.needsPasswordChange };
 };
 
 export const AuthService = {
   loginUser,
- 
 };
