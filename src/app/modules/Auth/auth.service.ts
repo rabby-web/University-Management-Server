@@ -155,8 +155,11 @@ const refreshToken = async (token: string) => {
   };
 };
 
+
+
 export const AuthService = {
   loginUser,
   changePassword,
   refreshToken,
+  forgetPassword,
 };
