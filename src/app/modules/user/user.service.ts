@@ -196,13 +196,7 @@ const getMe = async (userId: string, role: string) => {
 
   return result;
 };
-// const getMe = async (token: string) => {
-//   const decoded = verifyToken(token, config.jwt_access_secret as string);
-//   const { userId, role } = decoded;
-//   console.log(userId, role);
-//   // const result = await
-//   return {};
-// };
+
 
 export const UserService = {
   createStudentIntoDB,
