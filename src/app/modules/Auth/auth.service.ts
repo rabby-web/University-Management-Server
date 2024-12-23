@@ -196,7 +196,7 @@ const forgetPassword = async (userId: string) => {
 
 const resetPassword = async (
   payload: { id: string; newPassword: string },
-  token,
+  token: string,
 ) => {
   // checking if the user is exist
   const user = await User.isUserExistsByCustomId(payload.id);
@@ -217,6 +217,35 @@ const resetPassword = async (
   if (userStatus === 'blocked') {
     throw new AppError(httpStatus.FORBIDDEN, 'This user is blocked ! !');
   }
+
+  const decoded = jwt.verify(
+    token,
+    config.jwt_access_secret as string,
+  ) as JwtPayload;
+  console.log(decoded);
+
+  if (payload.id !==decoded.userId) {
+    console.log(payload.id, decoded.userId);
+    throw new AppError(httpStatus.FORBIDDEN, 'You are forbidden!');
+  }
+
+  // hash new password
+  const newHashedPassword = await bcrypt.hash(
+    payload.newPassword,
+    Number(config.bcrypt_salt_rounds),
+  );
+
+  await User.findOneAndUpdate(
+    {
+      id: decoded.userId,
+      role: decoded.role,
+    },
+    {
+      password: newHashedPassword,
+      needsPasswordChange: false,
+      passwordChangeAt: new Date(),
+    },
+  );
 };
 
 export const AuthService = {
@@ -227,4 +256,4 @@ export const AuthService = {
   resetPassword,
 };
 
-// http://localhost:3000/?id=A-0001&token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJBLTAwMDEiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MzQ5MzI5NzIsImV4cCI6MTczNDkzMzU3Mn0.IKj5OX-OFwv4ijJAjQW4SuTqLHlduxShu-fFpUDTsPM
+// http://localhost:3000/?id=A-0001&token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJBLTAwMDEiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MzQ5MzU2NDIsImV4cCI6MTczNDkzNzQ0Mn0.HRiVr2WHsD6QHBU_z8vHhaiJ0JZqDnvSkx-boQadH3M
