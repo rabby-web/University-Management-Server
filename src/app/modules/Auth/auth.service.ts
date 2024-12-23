@@ -185,7 +185,7 @@ const forgetPassword = async (userId: string) => {
   const resetToken = createToken(
     jwtPayload,
     config.jwt_access_secret as string,
-    '10m',
+    '30m',
   );
 
   const resetUILink = `${config.reset_pass_ui_link}?id=${user.id}&token=${resetToken}`;
@@ -200,3 +200,5 @@ export const AuthService = {
   refreshToken,
   forgetPassword,
 };
+
+// http://localhost:3000/?id=A-0001&token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJBLTAwMDEiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MzQ5MzI5NzIsImV4cCI6MTczNDkzMzU3Mn0.IKj5OX-OFwv4ijJAjQW4SuTqLHlduxShu-fFpUDTsPM
