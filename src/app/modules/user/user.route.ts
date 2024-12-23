@@ -33,7 +33,7 @@ router.post(
   '/change-status/:id',
   auth('admin'),
   validateRequest(UserValidation.changeStatusValidationSchema),
-  UserControllers.changeStatus,
+  UserController.changeStatus,
 );
 
 router.post('/me', auth('student', 'admin', 'faculty'), UserController.getMe);
