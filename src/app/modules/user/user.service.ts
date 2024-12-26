@@ -1,4 +1,4 @@
-import { path } from 'path';
+// import { path } from 'path';
 /* eslint-disable no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -55,6 +55,7 @@ const createStudentIntoDB = async (
     session.startTransaction();
     //set  generated id
     userData.id = await generateStudentId(admissionSemester);
+    
 
     const imageName = `${userData.id}${payload?.name?.firstName}`;
     const path = file?.path;
