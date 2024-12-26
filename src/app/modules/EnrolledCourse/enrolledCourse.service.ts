@@ -148,7 +148,7 @@ const createEnrolledCourseIntoDB = async (
 const updateEnrolledCourseMarksIntoDB = async (
   payload: Partial<TEnrolledCourse>,
 ) => {};
-
+  
 export const EnrolledCourseServices = {
   createEnrolledCourseIntoDB,
   updateEnrolledCourseMarksIntoDB,
