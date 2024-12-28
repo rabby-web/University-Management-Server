@@ -8,7 +8,7 @@ export interface TUser {
   password: string;
   needsPasswordChange: boolean;
   passwordChangeAt?: Date;
-  role: 'admin' | 'student' | 'faculty';
+  role: 'super-admin' | 'admin' | 'student' | 'faculty';
   status: 'in-progress' | 'blocked';
   isDeleted: boolean;
 }
@@ -20,7 +20,10 @@ export interface UserModel extends Model<TUser> {
     plainTextPassword: string,
     hashedPassword: string,
   ): Promise<boolean>;
-  isJWTIssuedBeforePasswordChanged(passwordChangedTimesStamp: Date, jwtIssuedTimesStamp:number):boolean
+  isJWTIssuedBeforePasswordChanged(
+    passwordChangedTimesStamp: Date,
+    jwtIssuedTimesStamp: number,
+  ): boolean;
 }
 
 export type TUserRole = keyof typeof USER_ROLE;

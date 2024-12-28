@@ -21,14 +21,12 @@ class QueryBuilder<T> {
         ),
       });
     }
-
     return this;
   }
 
   filter() {
-    const queryObj = { ...this.query }; // copy
+    const queryObj = { ...this.query }; 
 
-    // Filtering
     const excludeFields = ['searchTerm', 'sort', 'limit', 'page', 'fields'];
 
     excludeFields.forEach((el) => delete queryObj[el]);
