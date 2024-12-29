@@ -25,23 +25,34 @@ router.post(
 
 router.post(
   '/create-faculty',
-  // auth(USER_ROLE.admin),
+  auth(USER_ROLE.superAdmin, USER_ROLE.admin),
   validateRequest(createFacultyValidationSchema),
   UserController.createFaculty,
 );
 router.post(
   '/create-admin',
+  auth(USER_ROLE.superAdmin, USER_ROLE.admin),
   validateRequest(createAdminValidationSchema),
   UserController.createAdmin,
 );
 
 router.post(
   '/change-status/:id',
+  auth(USER_ROLE.superAdmin, USER_ROLE.admin),
   auth('admin'),
   validateRequest(UserValidation.changeStatusValidationSchema),
   UserController.changeStatus,
 );
 
-router.post('/me', auth('student', 'admin', 'faculty'), UserController.getMe);
+router.post(
+  '/me',
+  auth(
+    USER_ROLE.superAdmin,
+    USER_ROLE.admin,
+    USER_ROLE.faculty,
+    USER_ROLE.student,
+  ),
+  UserController.getMe,
+);
 
 export const UserRoutes = router;

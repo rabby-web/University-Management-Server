@@ -3,16 +3,19 @@ import { StudentControllers } from './student.controller';
 import validateRequest from '../../middleware/validateRequest';
 import { updateStudentValidationSchema } from './student.validation';
 import auth from '../../middleware/auth';
+import { USER_ROLE } from '../user/user.constant';
 
 const router = express.Router();
 
-// wll call controller function
-// router.post('/create-student', StudentControllers.createStudent);
-router.get('/', StudentControllers.getAllStudents);
+router.get(
+  '/',
+  auth(USER_ROLE.superAdmin, USER_ROLE.admin),
+  StudentControllers.getAllStudents,
+);
 
 router.get(
   '/:id',
-  auth('student', 'admin', 'faculty'),
+  auth(USER_ROLE.superAdmin, USER_ROLE.admin, USER_ROLE.faculty),
   StudentControllers.getSingleStudents,
 );
 
@@ -23,5 +26,4 @@ router.patch(
 );
 
 router.delete('/:id', StudentControllers.deleteStudent);
-
 export const StudentRoutes = router;
