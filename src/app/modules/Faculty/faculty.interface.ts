@@ -1,3 +1,4 @@
+import { AcademicFaculty } from './../academicFaculty/academicFaculty.model';
 /* eslint-disable no-unused-vars */
 import { Model, Types } from 'mongoose';
 
@@ -33,6 +34,7 @@ export type TFaculty = {
   permanentAddress: string;
   profileImg?: string;
   academicDepartment: Types.ObjectId;
+  academicFaculty: Types.ObjectId;
   isDeleted: boolean;
 };
 
