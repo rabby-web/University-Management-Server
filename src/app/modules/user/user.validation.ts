@@ -8,10 +8,6 @@ const userValidationSchema = z.object({
     })
     .max(20, { message: "Password can't be more then 20 characters" })
     .optional(),
-  // needsPasswordChange: z.boolean().optional().default(true),
-  // role: z.enum(['student', 'faculty', 'admin']),
-  // status: z.enum(['in-progress', 'blocked']).default('in-progress'),
-  // isDeleted: z.boolean().optional().default(false),
 });
 
 const changeStatusValidationSchema = z.object({
