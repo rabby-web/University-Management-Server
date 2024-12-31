@@ -10,6 +10,7 @@ import { Course } from '../Course/course.model';
 import { hasTimeConflict } from './OfferedCourse.utils';
 import QueryBuilder from '../../builder/Querybuilder';
 import { Faculty } from '../Faculty/faculty.model';
+import { Student } from '../student/student.model';
 
 const createOfferedCourseIntoDB = async (payload: TOfferedCourse) => {
   const {
@@ -210,7 +211,6 @@ const updateOfferedCourseIntoDB = async (
   const semesterRegistration = isOfferedCourseExists.semesterRegistration;
   // get the schedules of the faculties
 
-
   // Checking the status of the semester registration
   const semesterRegistrationStatus =
     await SemesterRegistration.findById(semesterRegistration);
@@ -248,12 +248,63 @@ const updateOfferedCourseIntoDB = async (
   return result;
 };
 
+const getMyOfferedCoursesFromDB = async (
+  userId: string,
+  query: Record<string, unknown>,
+) => {
+  //pagination setup
 
+  const page = Number(query?.page) || 1;
+  const limit = Number(query?.limit) || 10;
+  const skip = (page - 1) * limit;
+
+  const student = await Student.findOne({ id: userId });
+  // find the student
+  if (!student) {
+    throw new AppError(httpStatus.NOT_FOUND, 'User is not found');
+  }
+
+  //find current ongoing semester
+  const currentOngoingRegistrationSemester = await SemesterRegistration.findOne(
+    {
+      status: 'ONGOING',
+    },
+  );
+
+  if (!currentOngoingRegistrationSemester) {
+    throw new AppError(
+      httpStatus.NOT_FOUND,
+      'There is no ongoing semester registration!',
+    );
+  }
+
+
+
+  const result = await OfferedCourse.aggregate([
+    ...aggregationQuery,
+    ...paginationQuery,
+  ]);
+
+  const total = (await OfferedCourse.aggregate(aggregationQuery)).length;
+
+  const totalPage = Math.ceil(result.length / limit);
+
+  return {
+    meta: {
+      page,
+      limit,
+      total,
+      totalPage,
+    },
+    result,
+  };
+};
 
 export const OfferedCourseServices = {
   createOfferedCourseIntoDB,
   getAllOfferedCoursesFromDB,
   getSingleOfferedCourseFromDB,
   deleteOfferedCourseFromDB,
-  updateOfferedCourseIntoDB
+  updateOfferedCourseIntoDB,
+  getMyOfferedCoursesFromDB,
 };
