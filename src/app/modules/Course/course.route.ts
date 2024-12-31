@@ -44,6 +44,7 @@ router.put(
   validateRequest(CourseValidations.facultiesWithCourseValidationSchema),
   CourseControllers.assignFacultiesWithCourse,
 );
+
 router.get(
   '/:courseId/get-faculties',
   auth(
@@ -52,7 +53,7 @@ router.get(
     USER_ROLE.faculty,
     USER_ROLE.student,
   ),
-  CourseControllers.getAllFacultiesWithCourse,
+  CourseControllers.getFacultiesWithCourse,
 );
 
 router.delete(
