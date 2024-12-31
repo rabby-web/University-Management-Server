@@ -13,6 +13,13 @@ router.post(
   validateRequest(OfferedCourseValidations.createOfferedCourseValidationSchema),
   OfferedCourseControllers.createOfferedCourse,
 );
+
+router.get(
+  '/my-offered-courses',
+  auth(USER_ROLE.student),
+  OfferedCourseControllers.getMyOfferedCourses,
+);
+
 router.get(
   '/:id',
   auth(
